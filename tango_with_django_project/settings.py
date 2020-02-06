@@ -23,6 +23,8 @@ MEDIA_DIR = os.path.join(BASE_DIR, 'media')
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'df%sy09@(e45n^#$_2#%b_$&1e*h*43m-=dko51c*28&71sx$s'
+# Chapter 9 stuff
+LOGIN_URL = 'rango:login'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
