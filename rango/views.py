@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from rango.models import Category
 from rango.models import Page
-from rango.forms import CategoryForm, PageForm
+from rango.forms import CategoryForm, PageForm, UserForm, UserProfileForm
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
@@ -45,6 +45,7 @@ def show_category(request, category_name_slug):
     
     return render(request, 'rango/category.html', context=context_dict)
 
+@login_required
 def add_category(request):
     form = CategoryForm()
 # Add something here
@@ -57,6 +58,7 @@ def add_category(request):
             print(form.errors)
     return render(request, 'rango/add_category.html', {'form': form})
 
+@login_required
 def add_page(request, category_name_slug):
     # Add something here
     try:
@@ -97,20 +99,19 @@ def register(request):
             profile = profile_form.save(commit = False)
             profile.user = user
 
-            if 'picture' in requerst.FILES:
+            if 'picture' in request.FILES:
                 profile.picture = request.FILES['picture']
 
             profile.save()
-        
+
+            registered = True
         else:
             print(user_form.errors, profile_form.errors)
-
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
 
-    return render('request', 'rango/register.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
-
+    return render(request, 'rango/register.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
 
 def user_login(request):
     # If the request is a HTTP POST, try to pull out the relevant information.
